@@ -1,6 +1,51 @@
 <!DOCTYPE html>
+
 <html>
-  <body style="background-color:#000000">
-    <p style="color:#ffffff;font-family:Consolas">reflecting on milkweed</p>
-  </body>
+    <body style="background-color:#000000">
+        <p style="color:#ffffff;font-family:Consolas">reflecting on milkweed</p>
+
+        <label style="color:#ffffff;font-family:Consolas" for="targetfps">Target fps:</label>
+        <input type="number" id="targetfps" name="targetfps" value="4096"><br>
+
+        <label style="color:#ffffff;font-family:Consolas" for="graysky">Gray sky:</label>
+        <input type="checkbox" id="graysky" name="graysky"><br>
+
+        <label style="color:#ffffff;font-family:Consolas" for="voxel">Force performance lighting:</label>
+        <input type="checkbox" id="voxel" name="voxel"><br>
+
+        <input type="button" value="Copy" onclick="_copy()">
+        <button class="button" href="" download="ClientAppSettings.json" onclick="_dl()">Download</button>
+
+        <script type="text/javascript">
+            function _build() {
+                var build = "{\n"
+                build += "\"DFIntTaskSchedulerTargetFps\":" + document.getElementById("targetfps").value
+
+                if (document.getElementById("graysky").value) build += ",\n\"FFlagDebugSkyGray\": \"true\""
+                if (document.getElementById("voxel").value) build += ",\n\"DFFlagDebugRenderForceTechnologyVoxel\": \"true\""
+
+                build += '\n}'
+
+                return build
+            }
+
+            function _copy() {
+                const build = _build()
+
+                navigator.clipboard.writeText(build)
+                //alert("copied")
+            }
+
+            function _dl() {
+                const build = _build()
+
+                const a = document.createElement("a");
+                const file = new Blob([build], {type: "text/plain"})
+                a.setAttribute("href", URL.createObjectURL(file))
+                a.setAttribute("download", "ClientAppSettings.json")
+                a.click()
+                URL.revokeObjectURL(a.getAttribute("href"))
+            }
+        </script>
+    </body>
 </html>
